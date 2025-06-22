@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../features/invoices/presentation/screen/invoices_screen.dart';
 import '../../features/reference_invoice/presentation/screen/reference_invoice_screen.dart';
-import '../../features/result/result_screen.dart';
+import '../../features/result_screen.dart';
 import '../../features/splach_screen.dart';
 
 class Routes {
@@ -31,10 +31,14 @@ class Routes {
           ),
         );
       case referenceInvoice:
-        final deltaJson = routeSettings.arguments as List<dynamic>;
+        final arg = routeSettings.arguments as Map<String, dynamic>?;
 
         return CupertinoPageRoute(
-          builder: (_) => ReferenceInvoiceScreen(deltaJson: deltaJson),
+          builder: (_) => ReferenceInvoiceScreen(
+            deltaJson: arg?['deltaJson'],
+            isReadOnly: arg?['isReadOnly'],
+            title: arg?['title'],
+          ),
         );
 
       default:

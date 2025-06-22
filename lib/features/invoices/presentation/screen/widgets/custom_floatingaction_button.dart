@@ -91,15 +91,15 @@ class _CustomFloatingactionButtonState
 
       final doc = Document()..insert(0, extractedText);
 
-      widget.onLoadingChanged(false); 
+      widget.onLoadingChanged(false);
 
       Navigator.pushNamed(
         context,
         Routes.referenceInvoice,
-        arguments: doc.toDelta().toJson(),
+        arguments: {'deltaJson': doc.toDelta().toJson(), 'isReadOnly': false},
       );
     } catch (e) {
-      widget.onLoadingChanged(true); 
+      widget.onLoadingChanged(true);
       debugPrint('Error performing OCR: $e');
     }
   }

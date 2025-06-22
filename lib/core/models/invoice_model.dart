@@ -3,15 +3,17 @@ class InvoiceModel {
   String? title;
   String? invoicetext;
   dynamic richContent;
+  String? createdAt;
 
-  InvoiceModel({this.id, this.title, this.invoicetext, this.richContent});
+  InvoiceModel({this.id, this.title, this.invoicetext, this.richContent, this.createdAt});
 
   factory InvoiceModel.fromJson(Map<String, dynamic> json) {
     return InvoiceModel(
-      id: json['id'],
+      id: json['id'].toString(),
       title: json['title'],
       invoicetext: json['invoice_text'],
       richContent: json['rich_content'],
+      createdAt: json['created_at'],
     );
   }
 

@@ -4,13 +4,20 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:invoice_ocr_app/core/app/routes.dart';
 
-import '../cubits/add_invoice/add_invoice_cubit.dart';
 import '../../../../core/models/invoice_model.dart';
+import '../cubits/add_invoice/add_invoice_cubit.dart';
 
 class ReferenceInvoiceScreen extends StatefulWidget {
   final List<dynamic> deltaJson;
+  final bool? isReadOnly;
+  final String? title;
 
-  const ReferenceInvoiceScreen({super.key, required this.deltaJson});
+  const ReferenceInvoiceScreen({
+    super.key,
+    required this.deltaJson,
+    this.isReadOnly = false,
+    this.title,
+  });
 
   @override
   State<ReferenceInvoiceScreen> createState() => _ReferenceInvoiceScreenState();
@@ -27,8 +34,10 @@ class _ReferenceInvoiceScreenState extends State<ReferenceInvoiceScreen> {
   @override
   void initState() {
     super.initState();
+    _titleController.text = widget.title ?? '';
     final delta = Delta.fromJson(widget.deltaJson);
     _controller = QuillController(
+      readOnly: widget.isReadOnly ?? false,
       document: Document.fromDelta(delta),
       selection: const TextSelection.collapsed(offset: 0),
     );
@@ -183,6 +192,7 @@ class _ReferenceInvoiceScreenState extends State<ReferenceInvoiceScreen> {
                               margin: const EdgeInsets.all(12),
                               child: QuillEditor.basic(
                                 controller: _controller,
+
                                 config: const QuillEditorConfig(
                                   padding: EdgeInsets.symmetric(horizontal: 16),
                                 ),
@@ -218,6 +228,7 @@ class _ReferenceInvoiceScreenState extends State<ReferenceInvoiceScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: TextFormField(
+        readOnly: widget.isReadOnly ?? false,
         controller: _titleController,
         decoration: const InputDecoration(
           hintText: 'Title',
@@ -251,17 +262,23 @@ class _ReferenceInvoiceScreenState extends State<ReferenceInvoiceScreen> {
 
         TextButton(
           onPressed: () {
-            if (!_formKey.currentState!.validate()) return;
+            if (widget.isReadOnly ?? false) {
+              Navigator.pop(context);
+            } else {
+              if (!_formKey.currentState!.validate()) return;
 
-            final invoiceModel = InvoiceModel(
-              title: _titleController.text,
-              invoicetext: _controller.document.toPlainText(),
-              richContent: _controller.document.toDelta().toJson(),
-            );
-            BlocProvider.of<AddInvoiceCubit>(context).addInvoice(invoiceModel);
+              final invoiceModel = InvoiceModel(
+                title: _titleController.text,
+                invoicetext: _controller.document.toPlainText(),
+                richContent: _controller.document.toDelta().toJson(),
+              );
+              BlocProvider.of<AddInvoiceCubit>(
+                context,
+              ).addInvoice(invoiceModel);
+            }
           },
           child: Text(
-            'Done',
+            widget.isReadOnly ?? false ? 'Close' : 'Done',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),
