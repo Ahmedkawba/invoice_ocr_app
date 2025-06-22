@@ -3,11 +3,15 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 import 'core/app/routes.dart';
+import 'core/network/supabase_client.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  AppSupabaseClient.initialize();
+
   runApp(const MyApp());
 }
-//AIzaSyBJFE4Rl8EeM_YF5hAt4ukxtCwVqQYLyyo
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   static GlobalKey<NavigatorState> navigatorKay = GlobalKey<NavigatorState>();
@@ -29,7 +33,7 @@ class MyApp extends StatelessWidget {
         FlutterQuillLocalizations.delegate,
       ],
       supportedLocales: const [
-        // Locale('ar'), 
+        // Locale('ar'),
         Locale('en'),
       ],
     );

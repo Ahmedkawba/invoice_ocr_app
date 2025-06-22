@@ -91,7 +91,7 @@ class _CustomFloatingactionButtonState
 
       final doc = Document()..insert(0, extractedText);
 
-      widget.onLoadingChanged(false); // تأكد من إعادة الحالة إلى false
+      widget.onLoadingChanged(false); 
 
       Navigator.pushNamed(
         context,
@@ -99,7 +99,7 @@ class _CustomFloatingactionButtonState
         arguments: doc.toDelta().toJson(),
       );
     } catch (e) {
-      widget.onLoadingChanged(true); // تأكد من إعادة الحالة إلى false
+      widget.onLoadingChanged(true); 
       debugPrint('Error performing OCR: $e');
     }
   }

@@ -1,8 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/quill_delta.dart';
+import 'package:invoice_ocr_app/core/app/routes.dart';
+
+import '../cubits/add_invoice/add_invoice_cubit.dart';
+import '../../../../core/models/invoice_model.dart';
 
 class ReferenceInvoiceScreen extends StatefulWidget {
   final List<dynamic> deltaJson;
@@ -18,6 +21,8 @@ class _ReferenceInvoiceScreenState extends State<ReferenceInvoiceScreen> {
   final TextEditingController _titleController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -83,66 +88,126 @@ class _ReferenceInvoiceScreenState extends State<ReferenceInvoiceScreen> {
   Widget build(BuildContext context) {
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              _buildAppBar(),
-              Expanded(
+    return BlocProvider(
+      create: (context) => AddInvoiceCubit(),
+      child: Scaffold(
+        body: SafeArea(
+          child: BlocConsumer<AddInvoiceCubit, AddInvoiceState>(
+            listener: (context, state) {
+              if (state is AddInvoiceSuccess) {
+                Navigator.pushNamed(
+                  context,
+                  Routes.resultInvoice,
+                  arguments: {"isSuccess": true, "message": "تم الحفظ بنجاح!"},
+                );
+              } else if (state is AddInvoiceError) {
+                Navigator.pushNamed(
+                  context,
+                  Routes.resultInvoice,
+                  arguments: {"isSuccess": false, "message": state.failure},
+                );
+              }
+            },
+            builder: (context, state) {
+              if (state is AddInvoiceLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              return Form(
+                key: _formKey,
                 child: Column(
                   children: [
-                    _buildTextForm(),
-                    Divider(
-                      color: Colors.grey[300],
-                      height: 1,
-                      thickness: 1,
-                      indent: 16,
-                      endIndent: 16,
+                    BlocListener<AddInvoiceCubit, AddInvoiceState>(
+                      listener: (context, state) {
+                        if (state is AddInvoiceSuccess) {
+                          _isLoading = false;
+                          setState(() {});
+                          Navigator.pushNamed(
+                            context,
+                            Routes.resultInvoice,
+                            arguments: {
+                              "isSuccess": true,
+                              "message": "تم الحفظ بنجاح!",
+                            },
+                          );
+                        }
+                        if (state is AddInvoiceError) {
+                          _isLoading = false;
+                          setState(() {});
+                          Navigator.pushNamed(
+                            context,
+                            Routes.resultInvoice,
+                            arguments: {
+                              "isSuccess": false,
+                              "message": state.failure,
+                            },
+                          );
+                        }
+                        if (state is AddInvoiceLoading) {
+                          _isLoading = true;
+                          setState(() {});
+                        }
+                      },
+                      child: Container(),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: QuillSimpleToolbar(
-                        controller: _controller,
-                        config: buildToolbarConfig(
-                          showFontSize: true,
-                          showColorButton: true,
-                          showBackgroundColorButton: true,
-                          showListNumbers: true,
-                          showListBullets: true,
-                          showSearchButton: true,
-                        ),
+
+                    _buildAppBar(context),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          _buildTextForm(),
+                          Divider(
+                            color: Colors.grey[300],
+                            height: 1,
+                            thickness: 1,
+                            indent: 16,
+                            endIndent: 16,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: QuillSimpleToolbar(
+                              controller: _controller,
+                              config: buildToolbarConfig(
+                                showFontSize: true,
+                                showColorButton: true,
+                                showBackgroundColorButton: true,
+                                showListNumbers: true,
+                                showListBullets: true,
+                                showSearchButton: true,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Expanded(
+                            child: Container(
+                              margin: const EdgeInsets.all(12),
+                              child: QuillEditor.basic(
+                                controller: _controller,
+                                config: const QuillEditorConfig(
+                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Expanded(
-                      child: Container(
-                        margin: const EdgeInsets.all(12),
-                        child: QuillEditor.basic(
+                    if (isKeyboardVisible)
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        color: Colors.grey[100],
+                        child: QuillSimpleToolbar(
                           controller: _controller,
-                          config: const QuillEditorConfig(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
+                          config: buildToolbarConfig(
+                            showFormatting: true,
+                            color: Colors.grey[100],
                           ),
                         ),
                       ),
-                    ),
                   ],
                 ),
-              ),
-              if (isKeyboardVisible)
-                Container(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  color: Colors.grey[100],
-                  child: QuillSimpleToolbar(
-                    controller: _controller,
-                    config: buildToolbarConfig(
-                      showFormatting: true,
-                      color: Colors.grey[100],
-                    ),
-                  ),
-                ),
-            ],
+              );
+            },
           ),
         ),
       ),
@@ -173,7 +238,7 @@ class _ReferenceInvoiceScreenState extends State<ReferenceInvoiceScreen> {
     );
   }
 
-  Row _buildAppBar() {
+  Row _buildAppBar(BuildContext context) {
     return Row(
       children: [
         Expanded(
@@ -185,7 +250,16 @@ class _ReferenceInvoiceScreenState extends State<ReferenceInvoiceScreen> {
         Spacer(),
 
         TextButton(
-          onPressed: _saveDocument,
+          onPressed: () {
+            if (!_formKey.currentState!.validate()) return;
+
+            final invoiceModel = InvoiceModel(
+              title: _titleController.text,
+              invoicetext: _controller.document.toPlainText(),
+              richContent: _controller.document.toDelta().toJson(),
+            );
+            BlocProvider.of<AddInvoiceCubit>(context).addInvoice(invoiceModel);
+          },
           child: Text(
             'Done',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
@@ -193,11 +267,6 @@ class _ReferenceInvoiceScreenState extends State<ReferenceInvoiceScreen> {
         ),
       ],
     );
-  }
-
-  void _saveDocument() async {
-    if (!_formKey.currentState!.validate()) return;
-    final content = jsonEncode(_controller.document.toDelta().toJson());
   }
 
   @override
