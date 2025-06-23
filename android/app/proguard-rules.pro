@@ -1,0 +1,2 @@
+-keep class io.supabase.** { *; }
+-keep class org.postgresql.** { *; }

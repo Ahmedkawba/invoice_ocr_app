@@ -1,4 +1,4 @@
-package com.example.invoice_ocr_app
+package com.kaw.invoice.ocr
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -10,9 +10,8 @@ import 'core/network/supabase_client.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
-  AppSupabaseClient.initialize();
-
+  await dotenv.load(fileName: ".env"); // تحميل ملف البيئة
+  await AppSupabaseClient.initialize();
   runApp(const MyApp());
 }
 
