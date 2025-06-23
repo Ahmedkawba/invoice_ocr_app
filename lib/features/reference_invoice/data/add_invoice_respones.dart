@@ -6,14 +6,15 @@ import '../../../core/errore/failer.dart';
 import '../../../core/network/supabase_client.dart';
 
 abstract class AddProductRespones {
-  Future<Either<Failure, dynamic>> addProduct({
+  Future<Either<Failure, dynamic>> addInvoice({
     required InvoiceModel invoiceModel,
   });
 }
 
+// add invoice to supabase
 class AddProductResponesImpl implements AddProductRespones {
   @override
-  Future<Either<Failure, dynamic>> addProduct({
+  Future<Either<Failure, dynamic>> addInvoice({
     required InvoiceModel invoiceModel,
   }) async {
     try {

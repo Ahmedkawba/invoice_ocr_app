@@ -1,16 +1,24 @@
-# invoice_ocr_app
+# تطبيق استخراج النصوص من الفواتير
 
-A new Flutter project.
+تطبيق جوال لاستخراج النصوص من صور الفواتير باستخدام تقنية OCR وإرسالها إلى خادم Supabase.
 
-## Getting Started
+## الميزات الرئيسية
 
-This project is a starting point for a Flutter application.
+- التقاط صورة فاتورة أو اختيارها من المعرض
+- استخراج النصوص باستخدام Tesseract OCR
+- عرض النص المستخرج للمستخدم للتعديل
+- حفظ البيانات إلى Supabase
+- عرض سجل الفواتير المحفوظة
 
-A few resources to get you started if this is your first Flutter project:
+## المتطلبات الفنية
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter SDK
+- Android Studio أو Xcode (للتشغيل على الأجهزة)
+- حساب Supabase
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## إعداد المشروع
+
+1. استنسخ المشروع:
+   ```bash
+   git clone [رابط المشروع]
+   ```

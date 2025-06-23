@@ -31,7 +31,10 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Center(child: Text("الفواتير"))),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Center(child: Text("الفواتير")),
+      ),
       body: isLoadingOCR
           ? Center(child: CircularProgressIndicator())
           : RefreshIndicator(

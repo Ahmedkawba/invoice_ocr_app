@@ -52,6 +52,7 @@ class _CustomFloatingactionButtonState
     );
   }
 
+  // اختيار صورة
   Future<void> _getImage(ImageSource source) async {
     try {
       final pickedImage = await picker.pickImage(source: source);
@@ -71,6 +72,7 @@ class _CustomFloatingactionButtonState
     }
   }
 
+  // استخراج النص
   Future<void> _performOcr(String imagePath) async {
     try {
       await _copyTrainedDataIfNeeded();
@@ -104,6 +106,7 @@ class _CustomFloatingactionButtonState
     }
   }
 
+  // نسخ البيانات
   Future<void> _copyTrainedDataIfNeeded() async {
     final appDir = await getApplicationDocumentsDirectory();
     final tessdataDir = Directory(path.join(appDir.path, 'tessdata'));

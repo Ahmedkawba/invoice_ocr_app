@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:invoice_ocr_app/features/invoices/presentation/cubit/cubit/select_invoice_cubit.dart';
@@ -7,8 +8,9 @@ import 'package:invoice_ocr_app/features/invoices/presentation/cubit/cubit/selec
 import 'core/app/routes.dart';
 import 'core/network/supabase_client.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   AppSupabaseClient.initialize();
 
   runApp(const MyApp());

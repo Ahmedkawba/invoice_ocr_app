@@ -9,6 +9,7 @@ abstract class SelectInvoiceRespones {
   Future<Either<Failure, List<InvoiceModel>>> selectInvoice();
 }
 
+// selectInvoice from supabase database
 class SelectInvoiceResponesImpl implements SelectInvoiceRespones {
   @override
   Future<Either<Failure, List<InvoiceModel>>> selectInvoice() async {

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 
-import '../../../data/add_invoice_respones.dart';
 import '../../../../../core/models/invoice_model.dart';
+import '../../../data/add_invoice_respones.dart';
 
 part 'add_invoice_state.dart';
 
@@ -12,7 +12,7 @@ class AddInvoiceCubit extends Cubit<AddInvoiceState> {
 
   Future<void> addInvoice(InvoiceModel invoiceModel) async {
     emit(AddInvoiceLoading());
-    final result = await addProductRespones.addProduct(
+    final result = await addProductRespones.addInvoice(
       invoiceModel: invoiceModel,
     );
     result.fold(

@@ -43,6 +43,7 @@ class _ReferenceInvoiceScreenState extends State<ReferenceInvoiceScreen> {
     );
   }
 
+  // build toolbar config
   QuillSimpleToolbarConfig buildToolbarConfig({
     bool showUndo = false,
     bool showRedo = false,
