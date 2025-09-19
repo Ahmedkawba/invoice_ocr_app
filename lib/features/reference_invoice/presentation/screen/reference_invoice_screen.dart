@@ -29,7 +29,7 @@ class _ReferenceInvoiceScreenState extends State<ReferenceInvoiceScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   @override
   void initState() {
@@ -127,40 +127,6 @@ class _ReferenceInvoiceScreenState extends State<ReferenceInvoiceScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    BlocListener<AddInvoiceCubit, AddInvoiceState>(
-                      listener: (context, state) {
-                        if (state is AddInvoiceSuccess) {
-                          _isLoading = false;
-                          setState(() {});
-                          Navigator.pushNamed(
-                            context,
-                            Routes.resultInvoice,
-                            arguments: {
-                              "isSuccess": true,
-                              "message": "تم الحفظ بنجاح!",
-                            },
-                          );
-                        }
-                        if (state is AddInvoiceError) {
-                          _isLoading = false;
-                          setState(() {});
-                          Navigator.pushNamed(
-                            context,
-                            Routes.resultInvoice,
-                            arguments: {
-                              "isSuccess": false,
-                              "message": state.failure,
-                            },
-                          );
-                        }
-                        if (state is AddInvoiceLoading) {
-                          _isLoading = true;
-                          setState(() {});
-                        }
-                      },
-                      child: Container(),
-                    ),
-
                     _buildAppBar(context),
                     Expanded(
                       child: Column(

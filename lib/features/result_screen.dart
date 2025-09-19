@@ -37,7 +37,7 @@ class ResultScreen extends StatelessWidget {
                 const SizedBox(height: 40),
                 if (isSuccess!)
                   Lottie.asset(
-                    'assets/animations/success.json', // احفظ ملف JSON للرسوم المتحركة
+                    'assets/animations/success.json',
                     width: 150,
                     height: 150,
                   ),

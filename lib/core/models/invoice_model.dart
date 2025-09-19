@@ -5,7 +5,13 @@ class InvoiceModel {
   dynamic richContent;
   String? createdAt;
 
-  InvoiceModel({this.id, this.title, this.invoicetext, this.richContent, this.createdAt});
+  InvoiceModel({
+    this.id,
+    this.title,
+    this.invoicetext,
+    this.richContent,
+    this.createdAt,
+  });
 
   factory InvoiceModel.fromJson(Map<String, dynamic> json) {
     return InvoiceModel(
